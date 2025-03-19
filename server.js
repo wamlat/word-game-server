@@ -42,12 +42,25 @@ const shuffleWord = (word) => {
 };
 
 app.get("/random-six-letter-word", (req, res) => {
+    if (!words || words.length === 0) {
+        console.log("Error: Word list not loaded");
+        return res.status(500).json({ error: "Word list not loaded!" });
+    }
+
     const sixLetterWords = [...words].filter(word => word.length === 6);
+    console.log("Six-letter words count:", sixLetterWords.length);
+
     if (sixLetterWords.length === 0) {
+        console.log("No six-letter words found.");
         return res.status(500).json({ error: "No six-letter words found." });
     }
+
     const randomWord = sixLetterWords[Math.floor(Math.random() * sixLetterWords.length)];
+    console.log("Selected word:", randomWord);
+
     const randomWordAnagram = shuffleWord(randomWord);
+    console.log("Shuffled anagram:", randomWordAnagram);
+
     res.json({ word: randomWordAnagram });
 });
 
